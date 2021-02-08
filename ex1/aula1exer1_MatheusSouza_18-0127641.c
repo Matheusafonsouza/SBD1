@@ -191,13 +191,19 @@ void salvaArquivos()
 
   for (int indice = 0; indice < pessoasTamanho; indice++)
   {
+    podeSalvar = 0;
 
     for (int indiceVeiculo = 0; indiceVeiculo < veiculosTamanho; indiceVeiculo++)
     {
       if (strcmp(pessoas[indice].cpf, veiculos[indiceVeiculo].cpf) == 0)
       {
-        quantidadePessoas++;
+        podeSalvar = 1;
       }
+    }
+
+    if (podeSalvar)
+    {
+      quantidadePessoas++;
     }
   }
 
@@ -218,10 +224,6 @@ void salvaArquivos()
     {
       fprintf(arquivoPessoas, "%s\n", pessoas[indice].cpf);
       fprintf(arquivoPessoas, "%s\n", pessoas[indice].nome);
-    }
-    else
-    {
-      quantidadePessoas--;
     }
   }
 
