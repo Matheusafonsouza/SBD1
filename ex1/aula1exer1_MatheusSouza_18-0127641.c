@@ -183,14 +183,46 @@ void salvaArquivos()
   FILE *arquivoPessoas;
   FILE *arquivoVeiculos;
 
+  int podeSalvar = 0;
+  int quantidadePessoas = 0;
+
   arquivoPessoas = fopen("pessoas.txt", "w");
   arquivoVeiculos = fopen("veiculos.txt", "w");
 
-  fprintf(arquivoPessoas, "%d\n", pessoasTamanho);
   for (int indice = 0; indice < pessoasTamanho; indice++)
   {
-    fprintf(arquivoPessoas, "%s\n", pessoas[indice].cpf);
-    fprintf(arquivoPessoas, "%s\n", pessoas[indice].nome);
+
+    for (int indiceVeiculo = 0; indiceVeiculo < veiculosTamanho; indiceVeiculo++)
+    {
+      if (strcmp(pessoas[indice].cpf, veiculos[indiceVeiculo].cpf) == 0)
+      {
+        quantidadePessoas++;
+      }
+    }
+  }
+
+  fprintf(arquivoPessoas, "%d\n", quantidadePessoas);
+  for (int indice = 0; indice < pessoasTamanho; indice++)
+  {
+    podeSalvar = 0;
+
+    for (int indiceVeiculo = 0; indiceVeiculo < veiculosTamanho; indiceVeiculo++)
+    {
+      if (strcmp(pessoas[indice].cpf, veiculos[indiceVeiculo].cpf) == 0)
+      {
+        podeSalvar = 1;
+      }
+    }
+
+    if (podeSalvar)
+    {
+      fprintf(arquivoPessoas, "%s\n", pessoas[indice].cpf);
+      fprintf(arquivoPessoas, "%s\n", pessoas[indice].nome);
+    }
+    else
+    {
+      quantidadePessoas--;
+    }
   }
 
   fprintf(arquivoVeiculos, "%d\n", veiculosTamanho);
