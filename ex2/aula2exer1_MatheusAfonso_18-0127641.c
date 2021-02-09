@@ -38,16 +38,16 @@ void insereVeiculo(Veiculo veiculo)
 
 void cadastraPessoa()
 {
-  system("clear");
+  system("cls");
 
   Pessoa pessoa;
-  int pessoaExiste = 0;
+  int pessoaExiste = 0, indice;
   char continuar;
 
   printf("Digite o CPF da pessoa: ");
   scanf(" %[^\n]", pessoa.cpf);
 
-  for (int indice = 0; indice < pessoasTamanho; indice++)
+  for (indice = 0; indice < pessoasTamanho; indice++)
   {
     if (strcmp(pessoas[indice].cpf, pessoa.cpf) == 0)
     {
@@ -58,13 +58,13 @@ void cadastraPessoa()
   if (pessoaExiste)
   {
     system("clear");
-    puts("PESSOA JÁ EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
+    puts("PESSOA JA EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
     getchar();
     scanf("%c", &continuar);
     return;
   }
 
-  system("clear");
+  system("cls");
   printf("Digite o nome da pessoa: ");
   scanf(" %[^\n]", pessoa.nome);
 
@@ -73,10 +73,10 @@ void cadastraPessoa()
 
 void cadastraCarro()
 {
-  system("clear");
+  system("cls");
 
   Veiculo veiculo;
-  int pessoaExiste = 0;
+  int pessoaExiste = 0, indice;
   int veiculoExiste = 0;
   char continuar;
 
@@ -88,10 +88,10 @@ void cadastraCarro()
     return;
   }
 
-  printf("Digite o CPF do proprietário: ");
+  printf("Digite o CPF do proprietario: ");
   scanf(" %[^\n]", veiculo.cpf);
 
-  for (int indice = 0; indice < pessoasTamanho; indice++)
+  for (indice = 0; indice < pessoasTamanho; indice++)
   {
     if (strcmp(pessoas[indice].cpf, veiculo.cpf) == 0)
     {
@@ -101,18 +101,18 @@ void cadastraCarro()
 
   if (!pessoaExiste)
   {
-    system("clear");
-    puts("PESSOA NÃO EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
+    system("cls");
+    puts("PESSOA NAO EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
     getchar();
     scanf("%c", &continuar);
     return;
   }
 
-  system("clear");
+  system("cls");
   printf("Digite a placa do veiculo: ");
   scanf(" %[^\n]", veiculo.placa);
 
-  for (int indice = 0; indice < veiculosTamanho; indice++)
+  for (indice = 0; indice < veiculosTamanho; indice++)
   {
     if (strcmp(veiculos[indice].placa, veiculo.placa) == 0)
     {
@@ -122,18 +122,18 @@ void cadastraCarro()
 
   if (veiculoExiste)
   {
-    system("clear");
-    puts("VEICULO JÁ EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
+    system("cls");
+    puts("VEICULO JA EXISTENTE! APERTE ENTER PARA VOLTAR AO MENU");
     getchar();
     scanf("%c", &continuar);
     return;
   }
 
-  system("clear");
+  system("cls");
   printf("Digite o modelo do veiculo: ");
   scanf(" %[^\n]", veiculo.modelo);
 
-  system("clear");
+  system("cls");
   printf("Digite o ano do veiculo: ");
   scanf(" %[^\n]", veiculo.ano);
 
@@ -142,10 +142,11 @@ void cadastraCarro()
 
 void imprime()
 {
-  system("clear");
+  system("cls");
   char continuar;
-
-  for (int indice = 0; indice < pessoasTamanho; indice++)
+  int indice, veiculoIndice;
+	
+  for (indice = 0; indice < pessoasTamanho; indice++)
   {
     printf("DADOS DA PESSOA\n\n");
 
@@ -154,7 +155,7 @@ void imprime()
 
     printf("VEICULOS DA PESSOA\n\n");
 
-    for (int veiculoIndice = 0; veiculoIndice < veiculosTamanho; veiculoIndice++)
+    for (veiculoIndice = 0; veiculoIndice < veiculosTamanho; veiculoIndice++)
     {
       if (strcmp(veiculos[veiculoIndice].cpf, pessoas[indice].cpf) == 0)
       {
@@ -183,18 +184,52 @@ void salvaArquivos()
   FILE *arquivoPessoas;
   FILE *arquivoVeiculos;
 
+  int podeSalvar = 0;
+  int quantidadePessoas = 0, indice, indiceVeiculo;
+
   arquivoPessoas = fopen("pessoas.txt", "w");
   arquivoVeiculos = fopen("veiculos.txt", "w");
 
-  fprintf(arquivoPessoas, "%d\n", pessoasTamanho);
-  for (int indice = 0; indice < pessoasTamanho; indice++)
+  for (indice = 0; indice < pessoasTamanho; indice++)
   {
-    fprintf(arquivoPessoas, "%s\n", pessoas[indice].cpf);
-    fprintf(arquivoPessoas, "%s\n", pessoas[indice].nome);
+    podeSalvar = 0;
+
+    for (indiceVeiculo = 0; indiceVeiculo < veiculosTamanho; indiceVeiculo++)
+    {
+      if (strcmp(pessoas[indice].cpf, veiculos[indiceVeiculo].cpf) == 0)
+      {
+        podeSalvar = 1;
+      }
+    }
+
+    if (podeSalvar)
+    {
+      quantidadePessoas++;
+    }
+  }
+
+  fprintf(arquivoPessoas, "%d\n", quantidadePessoas);
+  for (indice = 0; indice < pessoasTamanho; indice++)
+  {
+    podeSalvar = 0;
+
+    for (indiceVeiculo = 0; indiceVeiculo < veiculosTamanho; indiceVeiculo++)
+    {
+      if (strcmp(pessoas[indice].cpf, veiculos[indiceVeiculo].cpf) == 0)
+      {
+        podeSalvar = 1;
+      }
+    }
+
+    if (podeSalvar)
+    {
+      fprintf(arquivoPessoas, "%s\n", pessoas[indice].cpf);
+      fprintf(arquivoPessoas, "%s\n", pessoas[indice].nome);
+    }
   }
 
   fprintf(arquivoVeiculos, "%d\n", veiculosTamanho);
-  for (int indice = 0; indice < veiculosTamanho; indice++)
+  for (indice = 0; indice < veiculosTamanho; indice++)
   {
     fprintf(arquivoVeiculos, "%s\n", veiculos[indice].cpf);
     fprintf(arquivoVeiculos, "%s\n", veiculos[indice].ano);
@@ -209,7 +244,7 @@ void salvaArquivos()
 void carregaArquivos()
 {
   char *linha;
-  int numeroPessoas, numeroVeiculos;
+  int numeroPessoas, numeroVeiculos, indice;
 
   FILE *arquivoPessoas;
   FILE *arquivoVeiculos;
@@ -220,7 +255,7 @@ void carregaArquivos()
   if (arquivoPessoas != NULL)
   {
     fscanf(arquivoPessoas, "%d", &numeroPessoas);
-    for (int indice = 0; indice < numeroPessoas; indice++)
+    for (indice = 0; indice < numeroPessoas; indice++)
     {
       Pessoa pessoa;
 
@@ -235,7 +270,7 @@ void carregaArquivos()
   if (arquivoVeiculos != NULL)
   {
     fscanf(arquivoVeiculos, "%d", &numeroVeiculos);
-    for (int indice = 0; indice < numeroVeiculos; indice++)
+    for (indice = 0; indice < numeroVeiculos; indice++)
     {
       Veiculo veiculo;
 
@@ -252,11 +287,11 @@ void carregaArquivos()
 
 int menu()
 {
-  system("clear");
+  system("cls");
   int opcao;
   char continuar;
 
-  puts("MENU DE OPÇÕES");
+  puts("MENU DE OPCAOES");
   puts("1 - CADASTRAR PESSOA");
   puts("2 - CADASTRAR CARRO");
   puts("3 - IMPRIMIR");
@@ -280,8 +315,8 @@ int menu()
     return 0;
 
   default:
-    system("clear");
-    puts("OPÇÃO INVÁLIDA! APERTE ENTER PARA VOLTAR AO MENU.");
+    system("cls");
+    puts("OPCAO INVALIDA! APERTE ENTER PARA VOLTAR AO MENU.");
     getchar();
     scanf("%c", &continuar);
     menu();
